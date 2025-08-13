@@ -211,11 +211,13 @@ function splice_theme_save_project_details($post_id)
 {
     // Check if our nonce is set
     if (! isset($_POST['splice_theme_project_details_nonce'])) {
+        splice_theme_log_security_event('Nonce missing in project save', array('post_id' => $post_id), 'warning');
         return;
     }
 
     // Verify that the nonce is valid
     if (! wp_verify_nonce($_POST['splice_theme_project_details_nonce'], 'splice_theme_save_project_details')) {
+        splice_theme_log_security_event('Invalid nonce in project save', array('post_id' => $post_id), 'warning');
         return;
     }
 
@@ -227,36 +229,77 @@ function splice_theme_save_project_details($post_id)
     // Check the user's permissions
     if (isset($_POST['post_type']) && 'project' == $_POST['post_type']) {
         if (! current_user_can('edit_post', $post_id)) {
+            splice_theme_log_security_event('Unauthorized project edit attempt', array('post_id' => $post_id, 'user_id' => get_current_user_id()), 'warning');
             return;
         }
     }
 
-    // Sanitize and save the data
+    // Validate post exists and is correct type
+    $post = get_post($post_id);
+    if (!$post || $post->post_type !== 'project') {
+        splice_theme_log_security_event('Invalid post type in project save', array('post_id' => $post_id), 'warning');
+        return;
+    }
+
+    // Sanitize and save the data with enhanced validation
     $fields = array(
-        'project_name',
-        'project_description',
-        'project_start_date',
-        'project_end_date',
-        'project_url'
+        'project_name' => 'text',
+        'project_description' => 'textarea',
+        'project_start_date' => 'date',
+        'project_end_date' => 'date',
+        'project_url' => 'url'
     );
 
-    foreach ($fields as $field) {
+    foreach ($fields as $field => $type) {
         if (isset($_POST[$field])) {
             $value = '';
-            switch ($field) {
-                case 'project_url':
-                    $value = esc_url_raw($_POST[$field]);
+            $raw_value = $_POST[$field];
+
+            // Enhanced validation and sanitization
+            switch ($type) {
+                case 'url':
+                    $value = esc_url_raw($raw_value);
+                    // Additional URL validation
+                    if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
+                        $value = '';
+                        splice_theme_log_security_event('Invalid URL in project save', array('field' => $field, 'value' => $raw_value), 'warning');
+                    }
                     break;
-                case 'project_description':
-                    $value = sanitize_textarea_field($_POST[$field]);
+                case 'textarea':
+                    $value = sanitize_textarea_field($raw_value);
+                    // Check for potentially malicious content
+                    if (preg_match('/<script|<iframe|<object|<embed/i', $value)) {
+                        $value = '';
+                        splice_theme_log_security_event('Potentially malicious content in project save', array('field' => $field), 'warning');
+                    }
+                    break;
+                case 'date':
+                    $value = sanitize_text_field($raw_value);
+                    // Validate date format
+                    if (!empty($value) && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+                        $value = '';
+                        splice_theme_log_security_event('Invalid date format in project save', array('field' => $field, 'value' => $raw_value), 'warning');
+                    }
                     break;
                 default:
-                    $value = sanitize_text_field($_POST[$field]);
+                    $value = sanitize_text_field($raw_value);
+                    // Check for potentially malicious content
+                    if (preg_match('/<script|<iframe|<object|<embed/i', $value)) {
+                        $value = '';
+                        splice_theme_log_security_event('Potentially malicious content in project save', array('field' => $field), 'warning');
+                    }
                     break;
             }
-            update_post_meta($post_id, '_' . $field, $value);
+
+            // Only update if value is valid
+            if (!empty($value) || $value === '') {
+                update_post_meta($post_id, '_' . $field, $value);
+            }
         }
     }
+
+    // Log successful save
+    splice_theme_log_security_event('Project saved successfully', array('post_id' => $post_id, 'user_id' => get_current_user_id()), 'info');
 }
 add_action('save_post', 'splice_theme_save_project_details');
 

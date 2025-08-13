@@ -313,16 +313,42 @@ function splice_theme_seeder_page()
     $message_type = 'info';
 
     if (isset($_POST['action'])) {
-        if ($_POST['action'] === 'create_projects' && wp_verify_nonce($_POST['seeder_nonce'], 'splice_theme_seeder')) {
-            $message = splice_theme_create_sample_projects();
-            $message_type = 'success';
-        } elseif ($_POST['action'] === 'clear_projects' && wp_verify_nonce($_POST['seeder_nonce'], 'splice_theme_seeder')) {
-            $message = splice_theme_clear_sample_projects();
-            $message_type = 'warning';
-        } elseif ($_POST['action'] === 'flush_rules' && wp_verify_nonce($_POST['seeder_nonce'], 'splice_theme_seeder')) {
-            flush_rewrite_rules();
-            $message = 'Rewrite rules flushed successfully. Project URLs should now work.';
-            $message_type = 'success';
+        // Verify nonce and user capabilities
+        if (!wp_verify_nonce($_POST['seeder_nonce'], 'splice_theme_seeder')) {
+            $message = 'Security check failed. Please try again.';
+            $message_type = 'error';
+            splice_theme_log_security_event('Invalid nonce in seeder form', array('user_id' => get_current_user_id()), 'warning');
+        } elseif (!current_user_can('manage_options')) {
+            $message = 'Insufficient permissions to perform this action.';
+            $message_type = 'error';
+            splice_theme_log_security_event('Unauthorized seeder access attempt', array('user_id' => get_current_user_id()), 'warning');
+        } else {
+            // Sanitize action
+            $action = sanitize_text_field($_POST['action']);
+
+            switch ($action) {
+                case 'create_projects':
+                    $message = splice_theme_create_sample_projects();
+                    $message_type = 'success';
+                    splice_theme_log_security_event('Sample projects created via seeder', array('user_id' => get_current_user_id()), 'info');
+                    break;
+                case 'clear_projects':
+                    $message = splice_theme_clear_sample_projects();
+                    $message_type = 'warning';
+                    splice_theme_log_security_event('All projects cleared via seeder', array('user_id' => get_current_user_id()), 'warning');
+                    break;
+                case 'flush_rules':
+                    flush_rewrite_rules();
+                    $message = 'Rewrite rules flushed successfully. Project URLs should now work.';
+                    $message_type = 'success';
+                    splice_theme_log_security_event('Rewrite rules flushed via seeder', array('user_id' => get_current_user_id()), 'info');
+                    break;
+                default:
+                    $message = 'Invalid action specified.';
+                    $message_type = 'error';
+                    splice_theme_log_security_event('Invalid action in seeder form', array('action' => $action, 'user_id' => get_current_user_id()), 'warning');
+                    break;
+            }
         }
     }
 

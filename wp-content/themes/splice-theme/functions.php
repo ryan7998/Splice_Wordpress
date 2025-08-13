@@ -71,3 +71,13 @@ require get_template_directory() . '/inc/custom-api.php';
  * Include project seeder
  */
 require get_template_directory() . '/inc/project-seeder.php';
+
+/**
+ * Include security functions
+ */
+require get_template_directory() . '/inc/security.php';
+
+/**
+ * Include security admin interface
+ */
+require get_template_directory() . '/inc/security-admin.php';

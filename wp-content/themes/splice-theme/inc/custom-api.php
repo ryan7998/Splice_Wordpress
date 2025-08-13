@@ -84,11 +84,22 @@ add_action('rest_api_init', 'splice_theme_register_api_routes');
  */
 function splice_theme_get_projects($request)
 {
-    // Get query parameters
-    $per_page = $request->get_param('per_page');
-    $page = $request->get_param('page');
-    $category = $request->get_param('category');
-    $tag = $request->get_param('tag');
+    // Rate limiting check
+    $client_ip = splice_theme_get_client_ip();
+    if (!splice_theme_check_rate_limit($client_ip, 100, 3600)) {
+        splice_theme_log_security_event('Rate limit exceeded for projects API', array('ip' => $client_ip), 'warning');
+        return new WP_Error(
+            'rate_limit_exceeded',
+            'Too many requests. Please try again later.',
+            array('status' => 429)
+        );
+    }
+
+    // Get query parameters with additional sanitization
+    $per_page = absint($request->get_param('per_page'));
+    $page = absint($request->get_param('page'));
+    $category = sanitize_text_field($request->get_param('category'));
+    $tag = sanitize_text_field($request->get_param('tag'));
 
     // Build query arguments
     $args = array(
@@ -158,10 +169,33 @@ function splice_theme_get_projects($request)
  */
 function splice_theme_get_single_project($request)
 {
-    $project_id = $request->get_param('id');
+    // Rate limiting check
+    $client_ip = splice_theme_get_client_ip();
+    if (!splice_theme_check_rate_limit($client_ip, 200, 3600)) {
+        splice_theme_log_security_event('Rate limit exceeded for single project API', array('ip' => $client_ip), 'warning');
+        return new WP_Error(
+            'rate_limit_exceeded',
+            'Too many requests. Please try again later.',
+            array('status' => 429)
+        );
+    }
+
+    $project_id = absint($request->get_param('id'));
+
+    // Validate project ID
+    if (!$project_id || $project_id <= 0) {
+        splice_theme_log_security_event('Invalid project ID in API request', array('project_id' => $project_id, 'ip' => $client_ip), 'warning');
+        return new WP_Error(
+            'invalid_project_id',
+            'Invalid project ID',
+            array('status' => 400)
+        );
+    }
+
     $project = get_post($project_id);
 
     if (!$project || $project->post_type !== 'project') {
+        splice_theme_log_security_event('Project not found in API request', array('project_id' => $project_id, 'ip' => $client_ip), 'info');
         return new WP_Error(
             'project_not_found',
             'Project not found',
