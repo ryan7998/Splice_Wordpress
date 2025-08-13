@@ -1,182 +1,158 @@
 /**
- * File navigation.js.
- *
- * Handles toggling the navigation menu for small screens and enables TAB key
- * navigation support for dropdown menus.
+ * Navigation functionality for Splice Theme
  */
-(function() {
-    'use strict';
+
+document.addEventListener('DOMContentLoaded', function() {
     
-    const siteNavigation = document.getElementById('site-navigation');
-    const menuToggle = document.querySelector('.menu-toggle');
-    const primaryMenu = document.getElementById('primary-menu');
-
-    // Return early if the navigation doesn't exist.
-    if (!siteNavigation) {
-        console.warn('Site navigation element not found');
-        return;
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const siteNavigation = document.querySelector('.site-navigation');
+    
+    if (mobileMenuToggle && siteNavigation) {
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            siteNavigation.classList.toggle('toggled');
+            this.setAttribute('aria-expanded', 
+                this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false'
+            );
+        });
     }
 
-    // Return early if the menu toggle button doesn't exist.
-    if (!menuToggle) {
-        console.warn('Menu toggle button not found');
-        return;
-    }
-
-    // Return early if the primary menu doesn't exist.
-    if (!primaryMenu) {
-        console.warn('Primary menu element not found');
-        return;
-    }
-
-    // Toggle the .toggled class and the aria-expanded value each time the button is clicked.
-    menuToggle.addEventListener('click', function() {
-        siteNavigation.classList.toggle('toggled');
-        primaryMenu.classList.toggle('toggled');
-
-        if (menuToggle.getAttribute('aria-expanded') === 'true') {
-            menuToggle.setAttribute('aria-expanded', 'false');
-        } else {
-            menuToggle.setAttribute('aria-expanded', 'true');
-        }
-    });
-
-    // Remove the .toggled class and set aria-expanded to false when the user clicks outside the navigation.
-    document.addEventListener('click', function(event) {
-        const isClickInside = siteNavigation.contains(event.target);
-
-        if (!isClickInside) {
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (siteNavigation && !siteNavigation.contains(e.target) && !mobileMenuToggle?.contains(e.target)) {
             siteNavigation.classList.remove('toggled');
-            primaryMenu.classList.remove('toggled');
-            menuToggle.setAttribute('aria-expanded', 'false');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            }
         }
     });
 
-    // Handle dropdown menus
-    const dropdownItems = primaryMenu.querySelectorAll('.dropdown');
+    // Dropdown functionality
+    const dropdowns = document.querySelectorAll('.dropdown');
     
-    dropdownItems.forEach(function(dropdown) {
-        const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
-        const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+    dropdowns.forEach(function(dropdown) {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const menu = dropdown.querySelector('.dropdown-menu');
         
-        if (dropdownToggle && dropdownMenu) {
-            // Desktop: Hover functionality
-            dropdown.addEventListener('mouseenter', function() {
-                if (window.innerWidth > 768) {
-                    dropdown.classList.add('open');
-                    dropdownToggle.setAttribute('aria-expanded', 'true');
-                }
-            });
-            
-            dropdown.addEventListener('mouseleave', function() {
-                if (window.innerWidth > 768) {
-                    dropdown.classList.remove('open');
-                    dropdownToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-            
-            // Mobile: Click functionality
-            dropdownToggle.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    dropdown.classList.toggle('open');
-                    
-                    const isExpanded = dropdownToggle.getAttribute('aria-expanded') === 'true';
-                    dropdownToggle.setAttribute('aria-expanded', !isExpanded);
-                }
-            });
-        }
-    });
-
-    // Get all the link elements within the menu.
-    const links = primaryMenu.getElementsByTagName('a');
-
-    // Get all the link elements with children within the menu.
-    const linksWithChildren = primaryMenu.querySelectorAll('.menu-item-has-children > a, .page_item_has_children > a');
-
-    // Toggle focus each time a menu link is focused or blurred.
-    for (const link of links) {
-        link.addEventListener('focus', toggleFocus, true);
-        link.addEventListener('blur', toggleFocus, true);
-    }
-
-    // Toggle focus each time a menu link with children receive a touch event.
-    for (const link of linksWithChildren) {
-        link.addEventListener('touchstart', toggleFocus, false);
-    }
-
-    /**
-     * Sets or removes .focus class on an element.
-     */
-    function toggleFocus() {
-        if (event.type === 'focus' || event.type === 'blur') {
-            let self = this;
-            // Move up through the ancestors of the current link until we hit .nav-menu.
-            while (!self.classList.contains('nav-menu')) {
-                // On li elements toggle the class .focus.
-                if ('li' === self.tagName.toLowerCase()) {
-                    self.classList.toggle('focus');
-                }
-                self = self.parentNode;
+        if (toggle && menu) {
+            // Desktop hover
+            if (window.innerWidth > 768) {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.classList.add('open');
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.classList.remove('open');
+                });
             }
-        }
-
-        if (event.type === 'touchstart') {
-            const menuItem = this.parentNode;
-            event.preventDefault();
-            for (const link of menuItem.parentNode.children) {
-                if (menuItem !== link) {
-                    link.classList.remove('focus');
-                }
-            }
-            menuItem.classList.toggle('focus');
-        }
-    }
-
-    // Close mobile menu when clicking on a link
-    for (const link of links) {
-        link.addEventListener('click', function() {
+            
+            // Mobile click
             if (window.innerWidth <= 768) {
-                // Don't close if it's a dropdown toggle
-                if (!this.classList.contains('dropdown-toggle')) {
-                    siteNavigation.classList.remove('toggled');
-                    primaryMenu.classList.remove('toggled');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                }
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropdown.classList.toggle('open');
+                });
             }
-        });
-    }
-
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            // Reset mobile menu state on desktop
-            siteNavigation.classList.remove('toggled');
-            primaryMenu.classList.remove('toggled');
-            menuToggle.setAttribute('aria-expanded', 'false');
-            
-            // Close all dropdowns on desktop resize
-            dropdownItems.forEach(function(dropdown) {
-                dropdown.classList.remove('open');
-                const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
-                if (dropdownToggle) {
-                    dropdownToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
         }
     });
 
-    // Initialize navigation on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Navigation initialized successfully');
-        
-        // Add some visual feedback for dropdowns
-        dropdownItems.forEach(function(dropdown) {
-            const dropdownToggle = dropdown.querySelector('.dropdown-toggle');
-            if (dropdownToggle) {
-                // Add a subtle indicator that this is a dropdown
-                dropdownToggle.style.cursor = 'pointer';
+    // Add loading states to buttons
+    const buttons = document.querySelectorAll('.cta-button, .project-link, .category-link');
+    
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            if (!this.classList.contains('loading')) {
+                this.classList.add('loading');
+                
+                // Remove loading state after navigation
+                setTimeout(() => {
+                    this.classList.remove('loading');
+                }, 2000);
             }
         });
     });
-})();
+
+    // Responsive navigation adjustments
+    function handleResize() {
+        const isMobile = window.innerWidth <= 768;
+        
+        dropdowns.forEach(function(dropdown) {
+            if (isMobile) {
+                dropdown.classList.remove('open');
+            }
+        });
+        
+        if (siteNavigation && isMobile) {
+            siteNavigation.classList.remove('toggled');
+        }
+    }
+
+    // Debounced resize handler
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(handleResize, 250);
+    });
+
+    // Initialize on page load
+    handleResize();
+
+    // Intersection Observer for fade-in animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all fade-in-up elements
+    const fadeElements = document.querySelectorAll('.fade-in-up');
+    fadeElements.forEach(function(element) {
+        observer.observe(element);
+    });
+});
+
+// Add mobile menu toggle button to header if not present
+document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('.header-content');
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    
+    if (header && !mobileToggle) {
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'mobile-menu-toggle';
+        toggleButton.setAttribute('aria-controls', 'primary-menu');
+        toggleButton.setAttribute('aria-expanded', 'false');
+        toggleButton.innerHTML = `
+            <span class="screen-reader-text">Menu</span>
+            <span class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        `;
+        
+        header.appendChild(toggleButton);
+        
+        // Add event listener to the newly created button
+        toggleButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const siteNavigation = document.querySelector('.site-navigation');
+            if (siteNavigation) {
+                siteNavigation.classList.toggle('toggled');
+                this.setAttribute('aria-expanded', 
+                    this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false'
+                );
+            }
+        });
+    }
+});

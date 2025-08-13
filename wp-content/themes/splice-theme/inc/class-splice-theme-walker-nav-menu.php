@@ -46,9 +46,10 @@ if (!class_exists('Splice_Theme_Walker_Nav_Menu')) {
                 $classes[] = 'dropdown';
             }
 
-            // Add depth classes
+            // Add depth classes and fade-in animation
             if ($depth > 0) {
                 $classes[] = 'dropdown-item';
+                $classes[] = 'fade-in-up';
             }
 
             $class_names = join(' ', apply_filters('nav_menu_css_class', array_filter($classes), $item, $args));

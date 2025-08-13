@@ -22,21 +22,21 @@
                     );
                     ?>
                 </div>
+            </div>
 
-                <div class="site-info">
-                    <div class="copyright">
-                        &copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>.
-                        <?php esc_html_e('All rights reserved.', 'splice-theme'); ?>
-                    </div>
-                    <div class="powered-by">
-                        <?php
-                        printf(
-                            esc_html__('Proudly powered by %s', 'splice-theme'),
-                            '<a href="https://wordpress.org/">WordPress</a>'
-                        );
-                        ?>
-                    </div>
-                </div><!-- .site-info -->
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>.
+                    <?php esc_html_e('All rights reserved.', 'splice-theme'); ?>
+                </div>
+                <div class="powered-by">
+                    <?php
+                    printf(
+                        esc_html__('Proudly powered by %s', 'splice-theme'),
+                        '<a href="https://wordpress.org/">WordPress</a>'
+                    );
+                    ?>
+                </div>
             </div>
         </div>
     </footer><!-- #colophon -->
