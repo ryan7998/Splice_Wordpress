@@ -502,7 +502,160 @@ body {
     border-radius: 8px;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== TAXONOMY PAGES ===== */
+
+/* Category and Tag Archive Pages */
+.page-header {
+    margin-bottom: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.page-title {
+    margin: 0 0 1rem 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.category-name,
+.tag-name,
+.term-name {
+    color: #007cba;
+}
+
+.category-description,
+.tag-description,
+.term-description {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 1rem;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* No Projects Found */
+.no-projects,
+.no-posts {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.no-projects h2,
+.no-posts h2 {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.no-projects p,
+.no-posts p {
+    color: #888;
+    margin-bottom: 2rem;
+}
+
+/* Browse Other Categories/Tags */
+.browse-other-categories,
+.browse-other-tags,
+.browse-other-terms {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+}
+
+.browse-other-categories h3,
+.browse-other-tags h3,
+.browse-other-terms h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.category-links,
+.tag-links,
+.term-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.category-links li,
+.tag-links li,
+.term-links li {
+    margin: 0;
+}
+
+.category-links a,
+.tag-links a,
+.term-links a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #007cba;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.category-links a:hover,
+.tag-links a:hover,
+.term-links a:hover {
+    background: #005a87;
+    transform: translateY(-2px);
+}
+
+/* Pagination */
+.navigation.pagination {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.nav-links a,
+.nav-links span {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    background: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: #007cba;
+    color: white;
+    border-color: #007cba;
+}
+
+.nav-links .current {
+    background: #007cba;
+    color: white;
+    border-color: #007cba;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .container {
         padding: 0 1rem;
@@ -529,5 +682,22 @@ body {
     
     .page-title {
         font-size: 2rem;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .category-links,
+    .tag-links,
+    .term-links {
+        flex-direction: column;
+    }
+    
+    .category-links a,
+    .tag-links a,
+    .term-links a {
+        text-align: center;
     }
 }

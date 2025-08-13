@@ -229,6 +229,11 @@ require get_template_directory() . '/inc/custom-post-types.php';
 require get_template_directory() . '/inc/custom-api.php';
 
 /**
+ * Include project seeder
+ */
+require get_template_directory() . '/inc/project-seeder.php';
+
+/**
  * Include Jetpack compatibility
  */
 if (defined('JETPACK__VERSION')) {

@@ -270,3 +270,35 @@ function splice_theme_flush_rewrite_rules()
     flush_rewrite_rules();
 }
 add_action('after_switch_theme', 'splice_theme_flush_rewrite_rules');
+
+/**
+ * Flush rewrite rules when projects are created/updated
+ */
+function splice_theme_flush_rewrite_rules_on_project_change($post_id, $post, $update)
+{
+    // Only run for project post type
+    if ($post->post_type !== 'project') {
+        return;
+    }
+
+    // Only run on publish/update, not on draft/save
+    if ($post->post_status === 'publish' || $update) {
+        // Schedule a rewrite flush for the next request
+        if (!get_option('splice_theme_rewrite_flush_needed')) {
+            update_option('splice_theme_rewrite_flush_needed', true);
+        }
+    }
+}
+add_action('wp_insert_post', 'splice_theme_flush_rewrite_rules_on_project_change', 10, 3);
+
+/**
+ * Perform rewrite flush if needed
+ */
+function splice_theme_maybe_flush_rewrite_rules()
+{
+    if (get_option('splice_theme_rewrite_flush_needed')) {
+        flush_rewrite_rules();
+        delete_option('splice_theme_rewrite_flush_needed');
+    }
+}
+add_action('init', 'splice_theme_maybe_flush_rewrite_rules', 20);
