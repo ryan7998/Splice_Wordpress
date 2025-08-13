@@ -28,9 +28,6 @@
         
         // Add reset functionality
         addResetFunctionality();
-
-        // Add remove filter functionality for individual filter tags
-        addRemoveFilterFunctionality();
     }
 
     /**
@@ -305,90 +302,6 @@
                 // Redirect to clean archive URL
                 window.location.href = $(this).attr('href');
             });
-        }
-    }
-
-    /**
-     * Add remove filter functionality for individual filter tags
-     */
-    function addRemoveFilterFunctionality() {
-        $(document).on('click', '.remove-filter', function(e) {
-            e.preventDefault();
-            console.log('Remove filter clicked');
-            
-            const $filterTag = $(this).closest('.filter-tag');
-            const filterType = $filterTag.data('filter-type');
-            
-            console.log('Filter type:', filterType);
-            console.log('Filter tag element:', $filterTag);
-            
-            if (filterType) {
-                // Remove the specific filter
-                removeSpecificFilter(filterType);
-            } else {
-                console.error('No filter type found for:', $filterTag);
-            }
-        });
-    }
-
-    /**
-     * Remove a specific filter and update the form
-     */
-    function removeSpecificFilter(filterType) {
-        console.log('Removing filter:', filterType);
-        
-        const $form = $('#project-filters-form');
-        const $field = $form.find(`[name="${filterType}"]`);
-        
-        console.log('Form found:', $form.length > 0);
-        console.log('Field found:', $field.length > 0);
-        console.log('Field element:', $field);
-        
-        if ($field.length) {
-            // Clear the field value
-            $field.val('');
-            console.log('Field value cleared');
-            
-            // Update localStorage
-            updateLocalStorageAfterRemoval(filterType);
-            
-            // Show loading indicator
-            showLoadingIndicator();
-            
-            // Submit the form to apply the updated filters
-            setTimeout(() => {
-                console.log('Submitting form after filter removal');
-                $form.submit();
-            }, 100);
-        } else {
-            console.error('Field not found for filter type:', filterType);
-        }
-    }
-
-    /**
-     * Update localStorage after removing a filter
-     */
-    function updateLocalStorageAfterRemoval(filterType) {
-        const storageKey = 'splice_theme_project_filters';
-        const savedFilters = localStorage.getItem(storageKey);
-        
-        if (savedFilters) {
-            try {
-                const filters = JSON.parse(savedFilters);
-                
-                // Remove the specific filter
-                delete filters[filterType];
-                
-                // Update localStorage
-                if (Object.keys(filters).length > 0) {
-                    localStorage.setItem(storageKey, JSON.stringify(filters));
-                } else {
-                    // If no filters left, remove the entire entry
-                    localStorage.removeItem(storageKey);
-                }
-            } catch (e) {
-                console.error('Error updating localStorage:', e);
-            }
         }
     }
 

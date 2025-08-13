@@ -112,55 +112,9 @@ $project_tags = get_terms(array(
             <span><?php esc_html_e('Applying filters...', 'splice-theme'); ?></span>
         </div>
 
-        <div class="filters-actions">
-            <a href="<?php echo esc_url(get_post_type_archive_link('project')); ?>" class="filter-reset" id="reset-filters-btn">
-                <span class="filter-icon">🔄</span>
-                <?php esc_html_e('Reset Filters', 'splice-theme'); ?>
-            </a>
-        </div>
 
-        <!-- Active Filters Display -->
-        <?php if ($current_search || $current_start_date || $current_end_date || $current_category || $current_tag) : ?>
-            <div class="active-filters">
-                <h4><?php esc_html_e('Active Filters:', 'splice-theme'); ?></h4>
-                <div class="filter-tags">
-                    <?php if ($current_search) : ?>
-                        <span class="filter-tag" data-filter-type="project_search">
-                            <?php esc_html_e('Search:', 'splice-theme'); ?> "<?php echo esc_html($current_search); ?>"
-                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove search filter', 'splice-theme'); ?>">×</a>
-                        </span>
-                    <?php endif; ?>
 
-                    <?php if ($current_start_date) : ?>
-                        <span class="filter-tag" data-filter-type="start_date">
-                            <?php esc_html_e('From:', 'splice-theme'); ?> <?php echo esc_html(date('M j, Y', strtotime($current_start_date))); ?>
-                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove start date filter', 'splice-theme'); ?>">×</a>
-                        </span>
-                    <?php endif; ?>
 
-                    <?php if ($current_end_date) : ?>
-                        <span class="filter-tag" data-filter-type="end_date">
-                            <?php esc_html_e('To:', 'splice-theme'); ?> <?php echo esc_html(date('M j, Y', strtotime($current_end_date))); ?>
-                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove end date filter', 'splice-theme'); ?>">×</a>
-                        </span>
-                    <?php endif; ?>
-
-                    <?php if ($current_category) : ?>
-                        <span class="filter-tag" data-filter-type="project_category">
-                            <?php esc_html_e('Category:', 'splice-theme'); ?> <?php echo esc_html(get_term_by('slug', $current_category, 'project_category')->name); ?>
-                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove category filter', 'splice-theme'); ?>">×</a>
-                        </span>
-                    <?php endif; ?>
-
-                    <?php if ($current_tag) : ?>
-                        <span class="filter-tag" data-filter-type="project_tag">
-                            <?php esc_html_e('Tag:', 'splice-theme'); ?> <?php echo esc_html(get_term_by('slug', $current_tag, 'project_tag')->name); ?>
-                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove tag filter', 'splice-theme'); ?>">×</a>
-                        </span>
-                    <?php endif; ?>
-                </div>
-            </div>
-        <?php endif; ?>
     </form>
 </div>
 
@@ -194,5 +148,7 @@ $project_tags = get_terms(array(
                 document.getElementById('project-filters-form').submit();
             });
         });
+
+
     });
 </script>
