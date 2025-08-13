@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Splice Theme Theme Customizer
+ * Splice Theme Customizer
  *
  * @package Splice_Theme
  */

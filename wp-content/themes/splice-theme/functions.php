@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Splice WordPress Theme - Minimal Functions
+ * Splice Theme - Minimal Functions
  *
  * @package Splice_Theme
  */
