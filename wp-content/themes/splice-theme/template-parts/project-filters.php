@@ -125,37 +125,37 @@ $project_tags = get_terms(array(
                 <h4><?php esc_html_e('Active Filters:', 'splice-theme'); ?></h4>
                 <div class="filter-tags">
                     <?php if ($current_search) : ?>
-                        <span class="filter-tag">
+                        <span class="filter-tag" data-filter-type="project_search">
                             <?php esc_html_e('Search:', 'splice-theme'); ?> "<?php echo esc_html($current_search); ?>"
-                            <a href="<?php echo esc_url(remove_query_arg('project_search', $_SERVER['REQUEST_URI'])); ?>" class="remove-filter" aria-label="<?php esc_attr_e('Remove search filter', 'splice-theme'); ?>">×</a>
+                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove search filter', 'splice-theme'); ?>">×</a>
                         </span>
                     <?php endif; ?>
 
                     <?php if ($current_start_date) : ?>
-                        <span class="filter-tag">
+                        <span class="filter-tag" data-filter-type="start_date">
                             <?php esc_html_e('From:', 'splice-theme'); ?> <?php echo esc_html(date('M j, Y', strtotime($current_start_date))); ?>
-                            <a href="<?php echo esc_url(remove_query_arg('start_date', $_SERVER['REQUEST_URI'])); ?>" class="remove-filter" aria-label="<?php esc_attr_e('Remove start date filter', 'splice-theme'); ?>">×</a>
+                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove start date filter', 'splice-theme'); ?>">×</a>
                         </span>
                     <?php endif; ?>
 
                     <?php if ($current_end_date) : ?>
-                        <span class="filter-tag">
+                        <span class="filter-tag" data-filter-type="end_date">
                             <?php esc_html_e('To:', 'splice-theme'); ?> <?php echo esc_html(date('M j, Y', strtotime($current_end_date))); ?>
-                            <a href="<?php echo esc_url(remove_query_arg('end_date', $_SERVER['REQUEST_URI'])); ?>" class="remove-filter" aria-label="<?php esc_attr_e('Remove end date filter', 'splice-theme'); ?>">×</a>
+                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove end date filter', 'splice-theme'); ?>">×</a>
                         </span>
                     <?php endif; ?>
 
                     <?php if ($current_category) : ?>
-                        <span class="filter-tag">
+                        <span class="filter-tag" data-filter-type="project_category">
                             <?php esc_html_e('Category:', 'splice-theme'); ?> <?php echo esc_html(get_term_by('slug', $current_category, 'project_category')->name); ?>
-                            <a href="<?php echo esc_url(remove_query_arg('project_category', $_SERVER['REQUEST_URI'])); ?>" class="remove-filter" aria-label="<?php esc_attr_e('Remove category filter', 'splice-theme'); ?>">×</a>
+                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove category filter', 'splice-theme'); ?>">×</a>
                         </span>
                     <?php endif; ?>
 
                     <?php if ($current_tag) : ?>
-                        <span class="filter-tag">
+                        <span class="filter-tag" data-filter-type="project_tag">
                             <?php esc_html_e('Tag:', 'splice-theme'); ?> <?php echo esc_html(get_term_by('slug', $current_tag, 'project_tag')->name); ?>
-                            <a href="<?php echo esc_url(remove_query_arg('project_tag', $_SERVER['REQUEST_URI'])); ?>" class="remove-filter" aria-label="<?php esc_attr_e('Remove tag filter', 'splice-theme'); ?>">×</a>
+                            <a href="#" class="remove-filter" aria-label="<?php esc_attr_e('Remove tag filter', 'splice-theme'); ?>">×</a>
                         </span>
                     <?php endif; ?>
                 </div>

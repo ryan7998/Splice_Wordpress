@@ -1752,6 +1752,14 @@ a:hover {
     animation: fadeInUp 0.5s ease forwards;
     opacity: 0;
     transform: translateY(10px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.filter-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
 }
 
 .filter-tag .remove-filter {
@@ -1763,11 +1771,18 @@ a:hover {
     padding: 0.1rem 0.3rem;
     border-radius: 50%;
     transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filter-tag .remove-filter:hover {
-    background: rgba(59, 130, 246, 0.2);
-    color: #1e3a8a;
+    background: rgba(239, 68, 68, 0.2);
+    color: #dc2626;
+    transform: scale(1.1);
 }
 
 .filtered-results-count {
