@@ -81,3 +81,8 @@ require get_template_directory() . '/inc/security.php';
  * Include security admin interface
  */
 require get_template_directory() . '/inc/security-admin.php';
+
+/**
+ * Include project filters functionality
+ */
+require get_template_directory() . '/inc/project-filters.php';

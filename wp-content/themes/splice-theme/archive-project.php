@@ -22,6 +22,12 @@ get_header(); ?>
             <?php endif; ?>
         </header>
 
+        <!-- Include Project Filters -->
+        <?php get_template_part('template-parts/project', 'filters'); ?>
+
+        <!-- Display Filtered Results Count -->
+        <?php splice_theme_display_filtered_results_count(); ?>
+
         <div class="projects-content">
             <?php if (have_posts()) : ?>
                 <div class="projects-grid">
