@@ -224,6 +224,11 @@ require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/custom-post-types.php';
 
 /**
+ * Include custom API endpoints
+ */
+require get_template_directory() . '/inc/custom-api.php';
+
+/**
  * Include Jetpack compatibility
  */
 if (defined('JETPACK__VERSION')) {
