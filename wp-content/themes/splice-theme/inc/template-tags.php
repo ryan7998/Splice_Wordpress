@@ -151,14 +151,51 @@ endif;
 
 if (! function_exists('splice_theme_fallback_menu')) :
     /**
-     * Fallback menu function
+     * Enhanced fallback menu function with better structure
      */
     function splice_theme_fallback_menu()
     {
-        echo '<ul class="menu">';
+        echo '<ul id="primary-menu">';
         echo '<li><a href="' . esc_url(home_url('/')) . '">' . esc_html__('Home', 'splice-theme') . '</a></li>';
-        echo '<li><a href="' . esc_url(get_permalink(get_option('page_for_posts'))) . '">' . esc_html__('Blog', 'splice-theme') . '</a></li>';
-        echo '<li><a href="' . esc_url(home_url('/projects/')) . '">' . esc_html__('Projects', 'splice-theme') . '</a></li>';
+
+        // Add Projects menu item
+        echo '<li class="dropdown">';
+        echo '<a href="' . esc_url(home_url('/projects/')) . '" class="dropdown-toggle">' . esc_html__('Projects', 'splice-theme') . ' <span class="dropdown-arrow">▼</span></a>';
+        echo '<ul class="dropdown-menu">';
+        echo '<li><a href="' . esc_url(home_url('/projects/')) . '">' . esc_html__('All Projects', 'splice-theme') . '</a></li>';
+
+        // Get project categories
+        $project_categories = get_terms(array(
+            'taxonomy' => 'project_category',
+            'hide_empty' => false,
+        ));
+
+        if (!empty($project_categories) && !is_wp_error($project_categories)) {
+            foreach ($project_categories as $category) {
+                echo '<li><a href="' . esc_url(get_term_link($category)) . '">' . esc_html($category->name) . '</a></li>';
+            }
+        }
+
+        echo '</ul>';
+        echo '</li>';
+
+        // Add Blog menu item
+        if (get_option('page_for_posts')) {
+            echo '<li><a href="' . esc_url(get_permalink(get_option('page_for_posts'))) . '">' . esc_html__('Blog', 'splice-theme') . '</a></li>';
+        }
+
+        // Add About page if it exists
+        $about_page = get_page_by_path('about');
+        if ($about_page) {
+            echo '<li><a href="' . esc_url(get_permalink($about_page->ID)) . '">' . esc_html__('About', 'splice-theme') . '</a></li>';
+        }
+
+        // Add Contact page if it exists
+        $contact_page = get_page_by_path('contact');
+        if ($contact_page) {
+            echo '<li><a href="' . esc_url(get_permalink($contact_page->ID)) . '">' . esc_html__('Contact', 'splice-theme') . '</a></li>';
+        }
+
         echo '</ul>';
     }
 endif;

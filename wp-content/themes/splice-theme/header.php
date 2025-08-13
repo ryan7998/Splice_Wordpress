@@ -38,7 +38,7 @@
                         <?php endif; ?>
                     </div><!-- .site-branding -->
 
-                    <nav id="site-navigation" class="main-navigation">
+                    <nav id="site-navigation">
                         <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
                             <span class="screen-reader-text"><?php esc_html_e('Menu', 'splice-theme'); ?></span>
                             <span class="hamburger">
@@ -47,17 +47,21 @@
                                 <span></span>
                             </span>
                         </button>
-                        <?php
-                        wp_nav_menu(
-                            array(
-                                'theme_location' => 'menu-1',
-                                'menu_id'        => 'primary-menu',
-                                'menu_class'     => 'menu',
-                                'container'      => false,
-                                'fallback_cb'    => 'splice_theme_fallback_menu',
-                            )
-                        );
-                        ?>
+
+                        <div class="menu-wrapper">
+                            <?php
+                            wp_nav_menu(
+                                array(
+                                    'theme_location' => 'menu-1',
+                                    'menu_id'        => 'primary-menu',
+                                    'menu_class'     => '',
+                                    'container'      => false,
+                                    'fallback_cb'    => 'splice_theme_fallback_menu',
+                                    'walker'         => new Splice_Theme_Walker_Nav_Menu(),
+                                )
+                            );
+                            ?>
+                        </div>
                     </nav><!-- #site-navigation -->
                 </div>
             </div>
