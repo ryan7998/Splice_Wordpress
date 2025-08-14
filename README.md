@@ -42,25 +42,89 @@ A comprehensive, custom-built WordPress theme showcasing advanced front-end and 
 
 ## 🛠️ Installation
 
-### Method 1: Direct Upload
+### Option 1: Complete Project Setup (Recommended for Demo/Portfolio)
+
+This option gives you the complete working site with all content, projects, and configurations.
+
+#### Prerequisites
+
+- Local development environment (XAMPP, MAMP, Local by Flywheel, etc.)
+- PHP 7.4+ and MySQL 5.6+
+
+#### Steps:
+
+1. **Clone the entire repository**:
+
+   ```bash
+   git clone https://github.com/ryan7998/Splice_Wordpress.git
+   cd Splice_Wordpress
+   ```
+
+2. **Set up your local environment**:
+
+   - Create a new database
+   - Configure your local domain (e.g., `splice-wordpress.local`)
+
+3. **Import the database**:
+
+   - Download the database export from the repository
+   - Import it into your local MySQL database
+   - Update the database connection in `wp-config.php`
+
+4. **Configure the site**:
+
+   - Update site URL in WordPress admin
+   - Flush permalinks (Settings → Permalinks → Save)
+
+5. **Access your site**:
+   - Frontend: `http://splice-wordpress.local`
+   - Admin: `http://splice-wordpress.local/wp-admin`
+
+#### Default Admin Credentials
+
+After importing the database, you can log in with:
+
+- **Username**: `admin`
+- **Password**: `admin`
+
+**Important**: Change these credentials immediately after first login for security!
+
+### Option 2: Theme-Only Installation
+
+Use this if you want to install just the theme in an existing WordPress site.
+
+#### Method 1: Direct Upload
 
 1. Download the theme files
 2. Upload the `splice-theme` folder to `/wp-content/themes/`
 3. Activate the theme in WordPress Admin → Appearance → Themes
 
-### Method 2: Git Clone
+#### Method 2: Git Clone
 
 ```bash
 cd wp-content/themes/
 git clone https://github.com/ryan7998/Splice_Wordpress.git splice-theme
 ```
 
-### Method 3: WordPress Admin
+#### Method 3: WordPress Admin
 
 1. Go to Appearance → Themes → Add New
 2. Click "Upload Theme"
 3. Choose the theme ZIP file
 4. Install and activate
+
+## 📊 Database Export
+
+The complete project includes a database export with:
+
+- Sample projects and categories
+- Custom post types and taxonomies
+- Theme settings and configurations
+- Sample content for demonstration
+
+**Download**: `database/splice_wordpress.sql`
+
+**Note**: Import this database to get the complete working site with all sample data.
 
 ## ⚙️ Configuration
 
