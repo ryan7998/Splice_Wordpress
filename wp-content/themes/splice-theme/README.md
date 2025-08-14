@@ -1,8 +1,6 @@
-# Splice Digital - WordPress Custom Theme
+# Splice Theme - WordPress Custom Theme
 
 A comprehensive, custom-built WordPress theme showcasing advanced front-end and back-end development skills. This theme demonstrates modern web development practices, custom post types, REST APIs, security implementations, and responsive design.
-
-![Splice Digital Theme](wp-content/themes/splice-theme/assets/images/Splice-Digital.png)
 
 ## 🚀 Features
 
